@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.fast_meal">
+    package="com.example.meals_menu">
    <application
-        android:label="fast_meal"
+        android:label="meals_menu"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:meals_menu/Widgets/meals.dart';
 
-class meal with ChangeNotifier {
+class meal {
   final String id;
   final String title;
   final String deskriptions;
@@ -22,7 +22,7 @@ class meal with ChangeNotifier {
   });
 }
 
-class Meals with ChangeNotifier {
+class Meals {
   List<meal> _meals = [
     meal(
         id: 'm1',
@@ -225,15 +225,12 @@ class Meals with ChangeNotifier {
     } else {
       _favorite.removeWhere((elementt) => elementt.id == MealId);
     }
-    notifyListeners();
+
+    print(a);
   }
 
   List<meal> get Favorite {
     return _favorite;
-  }
-
-  bool islike(mealsID) {
-    return _favorite.any((element) => element.id == mealsID);
   }
 
   List<meal> get list {

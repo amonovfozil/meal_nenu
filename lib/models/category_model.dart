@@ -8,7 +8,7 @@ class Models {
   Models({required this.id, required this.title, required this.url});
 }
 
-class Categories with ChangeNotifier {
+class Categories {
   List<Models> _list = [
     Models(id: 'c1', title: 'Fast Food', url: 'assets/images/ff.jpg'),
     Models(id: 'c2', title: 'Milliy Taomlar', url: 'assets/images/pp1.jpg'),

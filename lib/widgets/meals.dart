@@ -1,92 +1,113 @@
-import 'package:fast_meal/models/meals_model.dart';
 import 'package:flutter/material.dart';
+import 'package:meals_menu/models/meals_model.dart';
 
-class mealls extends StatelessWidget {
-  const mealls({
-    Key? key,
-    required this.Meal,
-    required this.isfavorit,
-    required this.islike,
-  }) : super(key: key);
+class meals extends StatefulWidget {
+  final Function IsFavorite;
+  final Function IsLike;
+  final meal MealsList;
+  meals(this.MealsList, this.IsFavorite, this.IsLike);
 
-  final meal Meal;
-  final Function isfavorit;
-  final Function islike;
+  @override
+  State<meals> createState() => _mealsState();
+}
+
+class _mealsState extends State<meals> {
+  void Goto_InfoMealsPage(BuildContext context) {
+    Navigator.of(context).pushNamed('inmfo Meal', arguments: widget.MealsList);
+  }
+
+  void clikLike(String Id) {
+    if (widget.IsLike(Id)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Sevimli o`cirildi'),
+        duration: const Duration(seconds: 1),
+        action: SnackBarAction(
+          label: "BEKOR QIL",
+          onPressed: () {
+            widget.IsFavorite(Id);
+          },
+        ),
+      ));
+    } else {
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GridTile(
-      child: Stack(
-        children: [
-          Container(
-            height: 300,
-            width: double.infinity,
-            child: Image.asset(
-              Meal.urls[0],
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            bottom: 70,
-            right: 0,
-            child: Container(
-              height: 35,
-              width: 135,
-              color: Colors.black.withOpacity(0.8),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-                child: Text(
-                  Meal.title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      fontSize: 20),
+    return InkWell(
+      onTap: () => Goto_InfoMealsPage(context),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          children: [
+            Stack(children: [
+              Container(
+                height: 200,
+                width: double.infinity,
+                child: widget.MealsList.urls[0].startsWith('assets/')
+                    ? Image.asset(
+                        widget.MealsList.urls[0],
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        widget.MealsList.urls[0],
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              Positioned(
+                bottom: 10,
+                right: 0,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  height: 40,
+                  width: widget.MealsList.title.length > 10 ? 180 : 150,
+                  color: Colors.black.withOpacity(0.7),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      widget.MealsList.title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
-      footer: Container(
-        color: Colors.white,
-        margin: const EdgeInsets.all(0),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            IconButton(
-              onPressed: () {
-                isfavorit(Meal.id);
-                
-              },
-              icon: islike(Meal.id)
-                  ? Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    )
-                  : Icon(
-                      Icons.favorite_outline,
-                      color: Colors.black.withOpacity(0.65),
-                    ),
-            ),
-            Text(
-              '${Meal.preparedTimes.toStringAsFixed(0)}min',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Colors.black87,
+            ]),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      clikLike(widget.MealsList.id);
+                      widget.IsFavorite(widget.MealsList.id);
+                    },
+                    icon: widget.IsLike(widget.MealsList.id)
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : Icon(
+                            Icons.favorite_outline,
+                            color: Colors.grey,
+                          ),
+                  ),
+                  Text(
+                    " ${widget.MealsList.preparedTimes}",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  ),
+                  Text(
+                    '\$${widget.MealsList.price}',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              '\$${Meal.price.toStringAsFixed(0)}',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-                color: Colors.black87,
-              ),
-            ),
-          ]),
+            )
+          ],
         ),
       ),
     );
